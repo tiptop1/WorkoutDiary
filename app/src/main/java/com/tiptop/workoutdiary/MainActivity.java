@@ -11,29 +11,31 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FragmentManager fragmentManager;
+    private Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        final Fragment fragment = null;
+        fragmentManager = getSupportFragmentManager();
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id){
                     case R.id.action_places:
-//                        fragment = new PlacesFragment();
+                        fragment = new PlacesFragment();
                         break;
                     case R.id.action_exercises:
-//                        fragment = new ExcercisesFragment();
+                        fragment = new ExercisesFragment();
                         break;
                     case R.id.action_workouts:
-//                        fragment = new WorkoutsFragment();
+                        fragment = new WorkoutsFragment();
                         break;
                     case R.id.action_statistics:
-//                        fragment = new StatisticsFragment();
+                        fragment = new StatisticsFragment();
                         break;
                 }
                 final FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -41,5 +43,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        bottomNavigation.setSelectedItemId(R.id.action_places);
     }
 }
