@@ -4,4 +4,8 @@
     <string name="menu_exercises">Exercises</string>
     <string name="menu_workouts">Workouts</string>
     <string name="menu_statistics">Statistics</string>
+    <string name="places_fragment">It\'s places fragment text!</string>
+    <string name="exercises_fragment">It\s exercises fragment text!</string>
+    <string name="workouts_fragment">It\s workouts fragment text!</string>
+    <string name="statistics_fragment">It\s statistics fragment text!</string>
 </resources>
