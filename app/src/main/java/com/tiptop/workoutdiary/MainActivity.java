@@ -1,5 +1,6 @@
 package com.tiptop.workoutdiary;
 
+import android.arch.persistence.room.Room;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -9,14 +10,40 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.tiptop.workoutdiary.db.WorkoutDiaryDb;
+import com.tiptop.workoutdiary.db.dao.PlacesDao;
+import com.tiptop.workoutdiary.db.entity.Place;
+
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private Fragment fragment;
+    private static WorkoutDiaryDb db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (db == null) {
+            db = Room.databaseBuilder(getApplicationContext(), WorkoutDiaryDb.class,
+                    "WorkoutDiary").build();
+            // #TODO - For test purpose - add some database content
+            PlacesDao placesDao = db.placesDao();
+
+            Place place = new Place();
+            place.name = "Gym";
+            place.description = "My favorite gym";
+            placesDao.addPlace(place);
+
+            place = new Place();
+            place.name = "Wellnes";
+            place.description = "Not my favorite club";
+            placesDao.addPlace(place);
+
+            place = new Place();
+            place.name = "Home";
+            place.description = "Sweet home";
+            placesDao.addPlace(place);
+        }
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
         fragmentManager = getSupportFragmentManager();
