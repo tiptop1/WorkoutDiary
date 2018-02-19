@@ -1,6 +1,7 @@
 package com.tiptop.workoutdiary;
 
 import android.arch.persistence.room.Room;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -26,23 +27,7 @@ public class MainActivity extends AppCompatActivity {
         if (db == null) {
             db = Room.databaseBuilder(getApplicationContext(), WorkoutDiaryDb.class,
                     "WorkoutDiary").build();
-            // #TODO - For test purpose - add some database content
-            PlacesDao placesDao = db.placesDao();
-
-            Place place = new Place();
-            place.name = "Gym";
-            place.description = "My favorite gym";
-            placesDao.addPlace(place);
-
-            place = new Place();
-            place.name = "Wellnes";
-            place.description = "Not my favorite club";
-            placesDao.addPlace(place);
-
-            place = new Place();
-            place.name = "Home";
-            place.description = "Sweet home";
-            placesDao.addPlace(place);
+            populateDbWithTestData(db);
         }
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
@@ -72,4 +57,38 @@ public class MainActivity extends AppCompatActivity {
         });
         bottomNavigation.setSelectedItemId(R.id.action_places);
     }
+
+    private void populateDbWithTestData(final WorkoutDiaryDb db) {
+        AsyncTask<WorkoutDiaryDb, Void, Void> task = new AsyncTask<WorkoutDiaryDb, Void, Void>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Void doInBackground(WorkoutDiaryDb... dbs) {
+                // #TODO - For test purpose - add some database content
+                WorkoutDiaryDb db = dbs[0];
+                PlacesDao placesDao = db.placesDao();
+
+                Place place = new Place();
+                place.name = "Gym";
+                place.description = "My favorite gym";
+                placesDao.addPlace(place);
+
+                place = new Place();
+                place.name = "Wellnes";
+                place.description = "Not my favorite club";
+                placesDao.addPlace(place);
+
+                place = new Place();
+                place.name = "Home";
+                place.description = "Sweet home";
+                placesDao.addPlace(place);
+                return null;
+            }
+        };
+        task.execute(db);
+    }
+
 }
