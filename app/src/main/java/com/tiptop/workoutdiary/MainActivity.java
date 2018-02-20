@@ -61,11 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private void populateDbWithTestData(final WorkoutDiaryDb db) {
         AsyncTask<WorkoutDiaryDb, Void, Void> task = new AsyncTask<WorkoutDiaryDb, Void, Void>() {
             @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
             protected Void doInBackground(WorkoutDiaryDb... dbs) {
                 // #TODO - For test purpose - add some database content
                 WorkoutDiaryDb db = dbs[0];
