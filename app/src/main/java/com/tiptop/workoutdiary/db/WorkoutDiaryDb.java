@@ -10,7 +10,7 @@ import com.tiptop.workoutdiary.db.entity.Place;
  * Created by tiptop on 24.01.18.
  */
 
-@Database(version = 1, entities = {Place.class})
+@Database(version = 1, entities = {Place.class}, exportSchema = false)
 public abstract class WorkoutDiaryDb extends RoomDatabase {
     public abstract PlacesDao placesDao();
 }
