@@ -14,12 +14,18 @@ import android.view.MenuItem;
 import com.tiptop.workoutdiary.db.WorkoutDiaryDb;
 import com.tiptop.workoutdiary.db.dao.PlacesDao;
 import com.tiptop.workoutdiary.db.entity.Place;
+import com.tiptop.workoutdiary.db.entity.Workout;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private Fragment fragment;
     private static WorkoutDiaryDb db;
+
+    private static AsyncTask<WorkoutDiaryDb, Void, Void> task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,32 +64,59 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setSelectedItemId(R.id.action_places);
     }
 
-    private void populateDbWithTestData(final WorkoutDiaryDb db) {
-        AsyncTask<WorkoutDiaryDb, Void, Void> task = new AsyncTask<WorkoutDiaryDb, Void, Void>() {
-            @Override
-            protected Void doInBackground(WorkoutDiaryDb... dbs) {
-                // #TODO - For test purpose - add some database content
-                WorkoutDiaryDb db = dbs[0];
-                PlacesDao placesDao = db.placesDao();
-
-                Place place = new Place();
-                place.name = "Gym";
-                place.description = "My favorite gym";
-                placesDao.addPlace(place);
-
-                place = new Place();
-                place.name = "Wellnes";
-                place.description = "Not my favorite club";
-                placesDao.addPlace(place);
-
-                place = new Place();
-                place.name = "Home";
-                place.description = "Sweet home";
-                placesDao.addPlace(place);
-                return null;
-            }
-        };
+    // TODO: temporary method
+    static private void populateDbWithTestData(final WorkoutDiaryDb db) {
+        AsyncTask<WorkoutDiaryDb, Void, Void> task = new TestDbPopulator();
         task.execute(db);
+    }
+
+    // TODO: The class is temporary - is used only to populate database with fake initial data.
+    static class TestDbPopulator extends AsyncTask<WorkoutDiaryDb, Void, Void> {
+        @Override
+        protected Void doInBackground(WorkoutDiaryDb... dbs) {
+            WorkoutDiaryDb db = dbs[0];
+            PlacesDao placesDao = db.placesDao();
+
+            Place place = new Place();
+            place.name = "Gym";
+            place.description = "My favorite gym";
+            placesDao.addPlace(place);
+
+            Workout workout = new Workout();
+            workout.startDate = generateDate(-20, 17, 30);
+            workout.endDate = generateDate(-20, 19, 0);
+            workout.placeId = place.id;
+
+            place = new Place();
+            place.name = "Wellnes";
+            place.description = "Not my favorite club";
+            placesDao.addPlace(place);
+
+            workout = new Workout();
+            workout.startDate = generateDate(-18, 19, 45);
+            workout.endDate = generateDate(-18, 21, 0);
+            workout.placeId = place.id;
+
+            place = new Place();
+            place.name = "Home";
+            place.description = "Sweet home";
+            placesDao.addPlace(place);
+
+            workout = new Workout();
+            workout.startDate = generateDate(-15, 18, 15);
+            workout.endDate = generateDate(-15, 20, 0);
+            workout.placeId = place.id;
+
+            return null;
+        }
+
+        private Date generateDate(int daysDiff, int hour, int minutes) {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_YEAR, daysDiff);
+            cal.set(Calendar.HOUR, hour);
+            cal.set(Calendar.MINUTE, minutes);
+            return cal.getTime();
+        }
     }
 
 }
