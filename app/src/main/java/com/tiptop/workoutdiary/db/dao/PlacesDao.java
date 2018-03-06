@@ -20,6 +20,9 @@ public interface PlacesDao {
     @Query("SELECT * FROM places")
     LiveData<List<Place>> getAll();
 
+    @Query("SELECT * FROM places WHERE name = :name")
+    LiveData<Place> findByName(String name);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addPlace(Place place);
 }
